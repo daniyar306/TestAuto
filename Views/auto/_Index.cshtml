@@ -1,0 +1,45 @@
+﻿@model IEnumerable<TestAuto.Models.auto>
+
+<p>
+   
+    <a onclick="showInPopup('@Url.Action("create","auto",null,Context.Request.Scheme)','New auto')" class="btn btn-success text-white"><i class="fas fa-random"></i> New auto</a>
+
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.brand)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.model)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.brand)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.model)
+            </td>
+            <td>
+                <a onclick="showInPopup('@Url.Action("Edit","auto",new {id=item.id},Context.Request.Scheme)','Edit_auto')" class="btn btn-info text-white"><i class="fas fa-pencil-alt"></i> Edit</a>
+                <form asp-action="Delete" asp-route-id="@item.id" onsubmit="return jQueryAjaxDelete(this)" class="d-inline">
+                    <input type="hidden" asp-for="@item.id" />
+                    <input type="submit" value="Delete" class="btn btn-danger" />
+                </form>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

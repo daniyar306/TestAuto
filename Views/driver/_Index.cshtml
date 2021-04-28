@@ -1,0 +1,46 @@
+﻿@model IEnumerable<TestAuto.Models.driver>
+
+<p>
+
+    <a onclick="showInPopup('@Url.Action("create","driver",null,Context.Request.Scheme)','New driver')" class="btn btn-success text-white"><i class="fas fa-random"></i> New driver</a>
+
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.auto_id)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.auto_id)
+            </td>
+            <td>
+                <a onclick="showInPopup('@Url.Action("Edit","driver",new {id=item.id},Context.Request.Scheme)','Edit_driver')" class="btn btn-info text-white"><i class="fas fa-pencil-alt"></i> Edit</a>
+                <form asp-action="Delete" asp-route-id="@item.id" onsubmit="return jQueryAjaxDelete(this)" class="d-inline">
+                    <input type="hidden" asp-for="@item.id" />
+                    <input type="submit" value="Delete" class="btn btn-danger" />
+                </form>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -14,9 +14,10 @@ namespace TestAuto.Models
         [Required]
         public string name { get; set; }
 
+        [Display(Name = "Auto")]
         public long auto_id { get; set; }
 
-
+        [Display(Name = "Auto")]
         public auto auto { get; set; }
     }
 }

@@ -42,14 +42,14 @@ namespace TestAuto.Models
                 dbConnection.Open();
                 var sql = "SELECT d.id,d.name,d.auto_id,a.model" +
                    " FROM driver as d" +
-                   " inner join auto as a " +
+                   " left join auto as a " +
                    "on d.auto_id=a.id";
-                return dbConnection.Query<driver, auto, driver>(sql, (driver, auto) => {
+              var item=   dbConnection.Query<driver, auto, driver>(sql, (driver, auto) => {
                                driver.auto = auto;
                                return driver;
                                     }, splitOn: "auto_id");
 
-              
+                return item;
             }
         }
         public async Task<IEnumerable<driver>> FindAllAsync()
@@ -59,7 +59,7 @@ namespace TestAuto.Models
                 dbConnection.Open();
                 var sql = "SELECT d.id,d.name,d.auto_id,a.model" +
                    " FROM driver as d" +
-                   " inner join auto as a " +
+                   " left join auto as a " +
                    "on d.auto_id=a.id";
                 return await dbConnection.QueryAsync<driver, auto, driver>(sql, (driver, auto) => {
                     driver.auto = auto;

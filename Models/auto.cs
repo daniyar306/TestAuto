@@ -18,5 +18,7 @@ namespace TestAuto.Models
         public string brand { get; set; }
         [Required]
         public string model { get; set; }
+
+        public List<driver> drivers { get; set; }
     }
 }

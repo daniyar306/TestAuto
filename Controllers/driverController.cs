@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -12,24 +13,26 @@ namespace TestAuto.Controllers
     public class driverController : Controller
     {
         private readonly driverRepository driverRepository;
+        private readonly autoRepository autoRepository;
 
         public driverController(IConfiguration configuration)
         {
             driverRepository = new driverRepository(configuration);
+            autoRepository = new autoRepository(configuration);
         }
 
 
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
-            return View(driverRepository.FindAll());
+            return View(await driverRepository.FindAllAsync());
         }
 
         public IActionResult Create()
         {
+            ViewBag.auto =new SelectList(autoRepository.FindAll(), "id", "model"); 
             return View();
         }
 
-        // POST: Customer/Create
         [HttpPost]
         public IActionResult Create(driver cust)
         {
@@ -44,8 +47,7 @@ namespace TestAuto.Controllers
 
         }
 
-        // GET: /Customer/Edit/1
-        public IActionResult Edit(int? id)
+        public  IActionResult Edit(int? id)
         {
             if (id == null)
             {
@@ -56,18 +58,18 @@ namespace TestAuto.Controllers
             {
                 return NotFound();
             }
+            ViewBag.auto = new SelectList(autoRepository.FindAll(), "id", "model", obj.auto_id);
             return View(obj);
 
         }
 
-        // POST: /Customer/Edit   
         [HttpPost]
         public IActionResult Edit(driver obj)
         {
 
             if (ModelState.IsValid)
             {
-                driverRepository.Update(obj);
+               driverRepository.Update(obj);
                 return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_Index", driverRepository.FindAll()) });
 
             }
@@ -75,7 +77,6 @@ namespace TestAuto.Controllers
 
         }
 
-        // GET:/Customer/Delete/1
         public IActionResult Delete(int? id)
         {
 

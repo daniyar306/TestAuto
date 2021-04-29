@@ -30,7 +30,7 @@ namespace TestAuto.Models
             using (IDbConnection dbConnection = Connection)
             {
                 dbConnection.Open();
-                dbConnection.Execute("INSERT INTO driver (id,name,auto_id) VALUES(@id,@name,@auto_id)", item);
+                dbConnection.ExecuteAsync("INSERT INTO driver (name,auto_id) VALUES(@name,@auto_id)", item);
             }
 
         }
@@ -40,7 +40,33 @@ namespace TestAuto.Models
             using (IDbConnection dbConnection = Connection)
             {
                 dbConnection.Open();
-                return dbConnection.Query<driver>("SELECT * FROM driver");
+                var sql = "SELECT d.id,d.name,d.auto_id,a.model" +
+                   " FROM driver as d" +
+                   " inner join auto as a " +
+                   "on d.auto_id=a.id";
+                return dbConnection.Query<driver, auto, driver>(sql, (driver, auto) => {
+                               driver.auto = auto;
+                               return driver;
+                                    }, splitOn: "auto_id");
+
+              
+            }
+        }
+        public async Task<IEnumerable<driver>> FindAllAsync()
+        {
+            using (IDbConnection dbConnection = Connection)
+            {
+                dbConnection.Open();
+                var sql = "SELECT d.id,d.name,d.auto_id,a.model" +
+                   " FROM driver as d" +
+                   " inner join auto as a " +
+                   "on d.auto_id=a.id";
+                return await dbConnection.QueryAsync<driver, auto, driver>(sql, (driver, auto) => {
+                    driver.auto = auto;
+                    return driver;
+                }, splitOn: "auto_id");
+
+
             }
         }
 
@@ -49,7 +75,7 @@ namespace TestAuto.Models
             using (IDbConnection dbConnection = Connection)
             {
                 dbConnection.Open();
-                return dbConnection.Query<driver>("SELECT * FROM driver WHERE id = @Id", new { Id = id }).FirstOrDefault();
+                return dbConnection.Query<driver>("SELECT * FROM driver driver WHERE id = @Id", new { Id = id }).FirstOrDefault();
             }
         }
 
@@ -58,10 +84,18 @@ namespace TestAuto.Models
             using (IDbConnection dbConnection = Connection)
             {
                 dbConnection.Open();
-                dbConnection.Execute("DELETE FROM driver WHERE Id=@Id", new { Id = id });
+                dbConnection.ExecuteAsync("DELETE FROM driver WHERE Id=@Id", new { Id = id });
             }
         }
 
+        public async Task UpdateAsync(driver item)
+        {
+            using (IDbConnection dbConnection = Connection)
+            {
+                dbConnection.Open();
+               await dbConnection.QueryAsync("UPDATE driver SET name = @Name,  auto_id= @auto_id WHERE id = @Id", item);
+            }
+        }
         public void Update(driver item)
         {
             using (IDbConnection dbConnection = Connection)
@@ -70,5 +104,6 @@ namespace TestAuto.Models
                 dbConnection.Query("UPDATE driver SET name = @Name,  auto_id= @auto_id WHERE id = @Id", item);
             }
         }
+
     }
 }

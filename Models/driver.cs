@@ -15,5 +15,8 @@ namespace TestAuto.Models
         public string name { get; set; }
 
         public long auto_id { get; set; }
+
+
+        public auto auto { get; set; }
     }
 }

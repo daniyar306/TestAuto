@@ -30,11 +30,19 @@ namespace TestAuto.Models
             using (IDbConnection dbConnection = Connection)
             {
                 dbConnection.Open();
-                dbConnection.Execute("INSERT INTO auto (id,brand,model) VALUES(@id,@brand,@model)", item);
+                dbConnection.Execute("INSERT INTO auto (brand,model) VALUES(@brand,@model)", item);
             }
 
         }
 
+        public async Task<IEnumerable<auto>> FindAllAsync()
+        {
+            using (IDbConnection dbConnection = Connection)
+            {
+                dbConnection.Open();
+                return await dbConnection.QueryAsync<auto>("SELECT * FROM auto");
+            }
+        }
         public IEnumerable<auto> FindAll()
         {
             using (IDbConnection dbConnection = Connection)
@@ -68,6 +76,14 @@ namespace TestAuto.Models
             {
                 dbConnection.Open();
                 dbConnection.Query("UPDATE auto SET brand = @brand,  model  = @model WHERE id = @Id", item);
+            }
+        }
+        public async Task UpdateAsync(auto item)
+        {
+            using (IDbConnection dbConnection = Connection)
+            {
+                dbConnection.Open();
+                await dbConnection.QueryAsync("UPDATE auto SET brand = @brand,  model  = @model WHERE id = @Id", item);
             }
         }
     }

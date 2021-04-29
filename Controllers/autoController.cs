@@ -19,9 +19,9 @@ namespace TestAuto.Controllers
         }
 
 
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
-            return View(autoRepository.FindAll());
+            return View(await autoRepository.FindAllAsync());
         }
 
         public IActionResult Create()
@@ -29,21 +29,20 @@ namespace TestAuto.Controllers
             return View();
         }
 
-        // POST: Customer/Create
+     
         [HttpPost]
-        public IActionResult Create(auto cust)
+        public  IActionResult CreateAsync(auto cust)
         {
             if (ModelState.IsValid)
             {
                 autoRepository.Add(cust);
-                return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_Index", autoRepository.FindAll()) });
+                return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_Index",  autoRepository.FindAll()) });
 
             }
           
             return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "_Index", cust) });
         }
 
-        // GET: /Customer/Edit/1
         public IActionResult Edit(int? id)
         {
             if (id == null)
@@ -59,20 +58,18 @@ namespace TestAuto.Controllers
 
         }
 
-        // POST: /Customer/Edit   
         [HttpPost]
-        public IActionResult Edit(auto obj)
+        public async Task<IActionResult> EditAsync(auto obj)
         {
 
             if (ModelState.IsValid)
             {
-                autoRepository.Update(obj);
-                return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_Index", autoRepository.FindAll()) });
+                await autoRepository.UpdateAsync(obj);
+                return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_Index",autoRepository.FindAll()) });
             }
             return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "_Index", obj) });
         }
 
-        // GET:/Customer/Delete/1
         public IActionResult Delete(int? id)
         {
 

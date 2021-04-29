@@ -1,16 +1,12 @@
 ﻿@model TestAuto.Models.driver
-
+@{ Layout = null; }
 <h4>driver</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create" onsubmit="return jQueryAjaxPost(this);">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="id" class="control-label"></label>
-                <input asp-for="id" class="form-control" />
-                <span asp-validation-for="id" class="text-danger"></span>
-            </div>
+
             <div class="form-group">
                 <label asp-for="name" class="control-label"></label>
                 <input asp-for="name" class="form-control" />
@@ -18,7 +14,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="auto_id" class="control-label"></label>
-                <input asp-for="auto_id" class="form-control" />
+                <select asp-for="auto" asp-items=ViewBag.auto></select>
                 <span asp-validation-for="auto_id" class="text-danger"></span>
             </div>
             <div class="form-group">

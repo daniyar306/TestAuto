@@ -1,9 +1,11 @@
 # TestAuto
 Тестовое задания 
-Script of database: 
--- Database: Car
 
--- DROP DATABASE "Car";
+
+
+
+Script of database: 
+
 
 CREATE DATABASE "Car"
     WITH 

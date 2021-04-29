@@ -27,9 +27,9 @@ namespace TestAuto.Controllers
             return View(await driverRepository.FindAllAsync());
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewBag.auto =new SelectList(autoRepository.FindAll(), "id", "model"); 
+            ViewBag.auto =new SelectList(await autoRepository.FindAllAsync(), "id", "model"); 
             return View();
         }
 
@@ -47,7 +47,7 @@ namespace TestAuto.Controllers
 
         }
 
-        public  IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
@@ -58,7 +58,7 @@ namespace TestAuto.Controllers
             {
                 return NotFound();
             }
-            ViewBag.auto = new SelectList(autoRepository.FindAll(), "id", "model", obj.auto_id);
+            ViewBag.auto = new SelectList(await autoRepository.FindAllAsync(), "id", "model", obj.auto_id);
             return View(obj);
 
         }
